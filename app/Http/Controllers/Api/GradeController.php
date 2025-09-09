@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\Grade;
 
@@ -21,7 +22,25 @@ class GradeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $grade = Grade::create($request->all());
+
+    // إيجاد ولي أمر الطالب
+    $student = $grade->student;
+    $parent = $student->parent;
+
+    if ($parent) {
+        Notification::create([
+            'title' => 'تم إدخال درجة جديدة',
+            'message' => "تم إدخال درجة {$grade->score} في مادة {$grade->subject->name} للطالب {$student->name}",
+            'type' => 'grade',
+            'student_id' => $student->id,
+            'user_id' => $parent->id,
+            'sent_at' => now(),
+        ]);
+    }
+
+    return response()->json($grade, 201);
+
     }
 
     /**
