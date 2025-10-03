@@ -11,8 +11,8 @@ class GradesTableSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        Grade::factory()->count(50)->create();
-    }
+    // public function run(): void
+    // {
+    //     Grade::factory()->count(50)->create();
+    // }
 }

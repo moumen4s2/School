@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('students', function (Blueprint $table) {
-            $table->foreignId('parent_id')->nullable()->constrained('users')->onDelete('set null');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('phone')->nullable()->unique();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('students', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

@@ -13,7 +13,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        return response()->json(Classroom::with('students')->get());
+        return response()->json(Classroom::all());
     }
 
     /**

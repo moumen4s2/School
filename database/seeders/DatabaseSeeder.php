@@ -2,48 +2,27 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\UsersTableSeeder;
-use Database\Seeders\StudentsTableSeeder;
-use Database\Seeders\TeachersTableSeeder;
-use Database\Seeders\ClassroomsTableSeeder;
-use Database\Seeders\SubjectsTableSeeder;
-use Database\Seeders\ClassroomSubjectTeacherSeeder;
-use Database\Seeders\AttendancesTableSeeder;
-use Database\Seeders\GradesTableSeeder;
-use Database\Seeders\SchedulesTableSeeder;
-
-
-
-
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // 1. إنشاء حساب المدير
+        \App\Models\User::create([
+            'name' => 'مدير المدرسة',
+            'email' => 'admin@school.com',
+            'phone' => '+963999123456',
+            'type' => 'admin',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
         ]);
 
-        $this->call([
-            UsersTableSeeder::class,
-            ClassroomsTableSeeder::class,
-            TeachersTableSeeder::class,
-            StudentsTableSeeder::class,
-            SubjectsTableSeeder::class,
-            ClassroomsTableSeeder::class,
-            ClassroomSubjectTeacherSeeder::class,
-            AttendancesTableSeeder::class,
-            GradesTableSeeder::class,
-            SchedulesTableSeeder::class
-    ]);
+        // 2. إدخال الصفوف
+        $this->call(ClassroomsTableSeeder::class);
+
+        // 3. إدخال المواد
+        $this->call(SubjectsTableSeeder::class);
+
+        // ❌ لا تُدخل طلاب أو معلمين بعد — سيُنشأون من لوحة التحكم
     }
 }

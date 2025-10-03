@@ -2,17 +2,24 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Classroom;
 
 class ClassroomsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        Classroom::factory()->count(10)->create();
+        $classrooms = [
+            'الصف الأول',
+            'الصف الثاني',
+            'الصف الثالث',
+            'الصف الرابع',
+            'الصف الخامس',
+            'الصف السادس',
+        ];
+
+        foreach ($classrooms as $name) {
+            Classroom::firstOrCreate(['name' => $name]);
+        }
     }
 }

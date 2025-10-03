@@ -11,8 +11,8 @@ class SchedulesTableSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        Schedule::factory()->count(30)->create();
-    }
+    // public function run(): void
+    // {
+    //     Schedule::factory()->count(30)->create();
+    // }
 }

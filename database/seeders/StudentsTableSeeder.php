@@ -11,8 +11,8 @@ class StudentsTableSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        Student::factory()->count(20)->create();
-    }
+    // public function run(): void
+    // {
+    //     Student::factory()->count(20)->create();
+    // }
 }

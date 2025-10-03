@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -16,7 +17,7 @@ use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\GradeController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\NotificationController;
-
+use App\Http\Controllers\Api\Admin\AdminController;
 
 
 
@@ -43,12 +44,6 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
 Route::post('/email/verify/send', [VerificationController::class, 'sendVerificationEmail']);
 Route::get('/email/verify/{id}', [VerificationController::class, 'verifyEmail'])->name('verification.verify');
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/email/verify/send', [VerificationController::class, 'sendVerificationEmail']);
-});
-
-Route::get('/email/verify/{id}', [VerificationController::class, 'verifyEmail'])->name('verification.verify');
-
 Route::middleware(['auth:sanctum', 'role:admin,teacher'])->group(function () {
     Route::apiResource('attendances', AttendanceController::class);
     Route::apiResource('grades',GradeController::class);
@@ -71,3 +66,48 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/{id}/mark-read', [NotificationController::class, 'markAsRead']);
 });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me', function (Request $request) {
+        return $request->user()->load('student');
+    });
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/student/dashboard', [StudentController::class, 'dashboard']);
+});
+
+Route::get('/classrooms', [ClassroomController::class, 'index']);
+Route::get('/subjects', [SubjectController::class, 'index']);
+
+Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
+    Route::apiResource('users', AdminController::class);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// Route::get('/test', function () {
+//     return response()->json(['message' => 'المسار يعمل']);
+// });
+
+// Route::post('/admin/test', function () {
+//     return response()->json(['message' => 'إنشاء مستخدم يعمل']);
+// })->middleware(['auth:sanctum', 'role:admin']);
+
+
+
+// Route::get('/test', function () {
+//     return response()->json(['message' => 'المسار يعمل']);
+// });
+
+// Route::post('/admin/test', function () {
+//     return response()->json(['message' => 'تم استلام الطلب']);
+// })->middleware(['auth:sanctum', 'role:admin']);

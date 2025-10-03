@@ -11,8 +11,8 @@ class ClassroomSubjectTeacherSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        ClassroomSubjectTeacher::factory()->count(20)->create();
-    }
+    // public function run(): void
+    // {
+    //     ClassroomSubjectTeacher::factory()->count(20)->create();
+    // }
 }

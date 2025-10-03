@@ -2,46 +2,46 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use App\Models\User;
+use Laravel\Sanctum\PersonalAccessToken;
 use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        // التحقق من البيانات
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
+        // البحث عن المستخدم
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['email or password are wrong'],
-            ]);
+        // التحقق من وجود المستخدم وكلمة المرور
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'بيانات الدخول غير صحيحة'
+            ], 401);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // إنشاء التوكن يدويًا باستخدام Sanctum
+        $plainTextToken = $user->createToken('auth_token')->plainTextToken;
 
+        // إرجاع الاستجابة
         return response()->json([
-            'access_token' => $token,
+            'access_token' => $plainTextToken,
             'token_type' => 'Bearer',
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'type' => $user->type,
+                'phone' => $user->phone,
+            ]
         ]);
     }
-
-    public function logout(Request $request)
-    {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Logged out']);
-    }
-
-    
-    
 }
-// for

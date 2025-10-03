@@ -48,4 +48,27 @@ class StudentController extends Controller
     {
         //
     }
+    public function dashboard(Request $request)
+    {
+        $user = $request->user();
+
+    // تأكد أن المستخدم طالب
+        if ($user->type !== 'student') {
+            return response()->json(['message' => 'غير مصرح'], 403);
+        }
+
+        $student = Student::with([
+            'classroom',
+            'grades.subject',
+            'attendances',
+            'comments.teacher'
+        ])->findOrFail($user->student_id);
+
+        return response()->json([
+            'student' => $student,
+            'grades' => $student->grades,
+            'attendance' => $student->attendances,
+            'comments' => $student->comments,
+        ]);
+    }
 }
